@@ -47,3 +47,15 @@ comptes_communes_martinique <- comptes_communes_2000_2017 %>% filter(dep == "\"9
 
 ```
 
+Estimation des taux d'épargne brute
+```{r}
+comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_epargne_brute = as.numeric(resultat_comptable) / as.numeric(produits_total))
+
+```
+
+Estimation des taux d'épargne nette
+```{r}
+comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_epargne_nette = (as.numeric(resultat_comptable) - as.numeric(invest_empl_remboursement_emprunts)) / as.numeric(produits_total))
+
+```
+
