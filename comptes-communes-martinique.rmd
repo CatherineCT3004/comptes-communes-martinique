@@ -49,13 +49,27 @@ comptes_communes_martinique <- comptes_communes_2000_2017 %>% filter(dep == "\"9
 
 Estimation des taux d'épargne brute
 ```{r}
-comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_epargne_brute = as.numeric(resultat_comptable) / as.numeric(produits_total))
+comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_epargne_brute = as.numeric(cap_autofinancement) / as.numeric(produits_total))
+
 
 ```
 
 Estimation des taux d'épargne nette
 ```{r}
-comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_epargne_nette = (as.numeric(resultat_comptable) - as.numeric(invest_empl_remboursement_emprunts)) / as.numeric(produits_total))
+comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_epargne_nette = as.numeric(cap_autofinancement_nette) / as.numeric(produits_total))
+
+
+```
+
+Estimation des taux d'effort
+```{r}
+comptes_communes_martinique <- comptes_communes_martinique %>% mutate(taux_effort = as.numeric(invest_empl_equipements) / as.numeric(produits_total))
+
+```
+
+Stratification de la population
+```{r}
+cut(as.numeric(comptes_communes_martinique$population), breaks = c(0,500,2000,3500, 10000, 30000, 100000), labels = c("<500","500-2000","2000-3500", "3500-10000", "10000-30000", "30000-100000"), right = TRUE)
 
 ```
 
