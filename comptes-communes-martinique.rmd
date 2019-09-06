@@ -1,0 +1,49 @@
+---
+title: "Comptes communes Martinique"
+author: "Catherine Talbot"
+date: "05/09/2019"
+output: html_document
+---
+
+# Analyse financière des communes de Martinique
+
+Importation des données issues de [data.gouv.fr](https://www.data.gouv.fr/fr/datasets/comptes-individuels-des-communes/) (modifier le chemin d'accès des données si nécessaire).
+
+```{r}
+comptes_communes_2000_2017 <- read_excel("C:/Users/cathe/OneDrive/Bureau/Data science/comptes-communes-2000-2017.xlsx",
+col_names = FALSE)
+View(comptes_communes_2000_2017)
+
+```
+
+Répartition des données en plusieurs colonnes
+
+```{r}
+communes_colonnes <- c("annee", "dep", "depcom", "commune", "population", "produits_total", "prod_impots_locaux", "prod_autres_impots_taxes", "prod_dotation", "charges_total", "charges_personnel", "charges_achats", "charges_financieres", "charges_contingents", "charges_subventions", "resultat_comptable", "invest_ressources_total", "invest_ress_emprunts", "invest_ress_subventions", "invest_ress_fctva", "invest_ress_retours", "invest_emplois_total", "invest_empl_equipements", "invest_empl_remboursement_emprunts", "invest_empl_charges", "invest_empl_immobilisations", "excedent_brut", "cap_autofinancement", "cap_autofinancement_nette", "dette_encours_total", "dette_encours_bancaire", "avance_tresor", "dette_annuite", "fond_de_roulement", "taxe_habitation", "taxe_habitation_base", "taxe_foncier_bati", "taxe_foncier_bati_base", "taxe_non_bati", "taxe_non_bati_base", "taxe_add_non_bati", "taxe_add_non_bati_base", "cotis_fonciere_entreprises", "cotis_fonciere_enreprises_base", "cotisation_valeur_ajoutee_entreprises", "import_forfait_entreprises_reseau", "taxe_surf_commerciales", "compensation_relais_2010", "taxe_professionnelle", "taxe_professionnelle_base", "produits_fonctionnement_caf", "charges_fonctionnement_caf", "encours_bancaire_net_solde_fonds_toxiques")
+comptes_communes_2000_2017 <- comptes_communes_2000_2017 %>% separate(1, communes_colonnes, ",")
+
+```
+
+Effacement des caractères parasites
+
+```{r}
+pattern_1 <- "\\s\\(L\'\\)"
+pattern_2 <- "\\s\\(LA\\)"
+pattern_3 <- "\\s\\(LE\\)"
+pattern_4 <- "\\s\\(LES\\)"
+pattern_5 <- "FRANÃ‡OIS"
+comptes_communes_2000_2017 <- comptes_communes_2000_2017 %>% mutate(commune = str_replace_all(commune, pattern_1, ""))
+comptes_communes_2000_2017 <- comptes_communes_2000_2017 %>% mutate(commune = str_replace_all(commune, pattern_2, ""))
+comptes_communes_2000_2017 <- comptes_communes_2000_2017 %>% mutate(commune = str_replace_all(commune, pattern_3, ""))
+comptes_communes_2000_2017 <- comptes_communes_2000_2017 %>% mutate(commune = str_replace_all(commune, pattern_4, ""))
+comptes_communes_2000_2017 <- comptes_communes_2000_2017 %>% mutate(commune = str_replace_all(commune, pattern_5, "FRANCOIS"))
+
+```
+
+Sélection des communes de Martinique (à adapter pour les autres départements si besoin).
+
+```{r}
+comptes_communes_martinique <- comptes_communes_2000_2017 %>% filter(dep == "\"972\"")
+
+```
+
