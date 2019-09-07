@@ -307,7 +307,10 @@ choroLayer(
   legend.title.txt = "Taux Epargne Brute",
   add = TRUE
 )
-
+layoutLayer(title = "Taux d'Epargne Brute 2017 en Martinique", 
+            sources = "Source: MINEFI, data.gouv.fr, 2019",
+            author = paste0("OCN/FDF "), 
+            frame = TRUE, north = FALSE, tabtitle = TRUE, theme= "blue.pal")
 ```
 
 Cartographie des taux d'épargne nette en 2017
@@ -335,6 +338,10 @@ choroLayer(
   legend.title.txt = "Taux Epargne Nette",
   add = TRUE
 )
+layoutLayer(title = "Taux d'Epargne Nette 2017 en Martinique", 
+            sources = "Source: MINEFI, data.gouv.fr, 2019",
+            author = paste0("OCN/FDF "), 
+            frame = TRUE, north = FALSE, tabtitle = TRUE, theme= "blue.pal")
 
 ```
 
@@ -356,6 +363,10 @@ choroLayer(
   legend.title.txt = "Taux Effort",
   add = TRUE
 )
+layoutLayer(title = "Taux d'Effort 2017 en Martinique", 
+            sources = "Source: MINEFI, data.gouv.fr, 2019",
+            author = paste0("OCN/FDF "), 
+            frame = TRUE, north = FALSE, tabtitle = TRUE, theme= "blue.pal")
 
 ```
 
