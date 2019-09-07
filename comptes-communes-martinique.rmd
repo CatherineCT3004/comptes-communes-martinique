@@ -141,17 +141,18 @@ Stratification de la population
 comptes_communes_martinique <-
   comptes_communes_martinique %>% mutate(strate = cut(
     as.numeric(comptes_communes_martinique$population),
-    breaks = c(0, 500, 2000, 3500, 10000, 30000, 100000),
+    breaks = c(0, 500, 2000, 5000, 10000, 30000, 100000),
     labels = c(
       "<500",
       "500-2000",
-      "2000-3500",
-      "3500-10000",
+      "2000-5000",
+      "5000-10000",
       "10000-30000",
       "30000-100000"
     ),
     right = TRUE
   ))
+
 
 
 ```
@@ -194,5 +195,148 @@ ggplot(aes(annee, taux_effort_moyen)) +
 geom_point(alpha = 0.5) +
 geom_smooth(method = "lm") +
 facet_wrap( ~ strate)
+```
+
+### Représentation cartographique des taux d'épargne brute, d'épargne nette et d'effort
+
+Importations des données cartographiques de la Martinique
+```{r}
+# path to the geopackage file embedded in cartography
+path_to_file <- system.file("gpkg/mtq.gpkg", package = "cartography")
+# import to an sf object
+mtq <- st_read(dsn = path_to_file, quiet = TRUE)
+plot(st_geometry(mtq))
+
+```
+
+Sélection des données de la Martinique pour l'année 2017
+```{r}
+comptes_communes_martinique_2017 <- comptes_communes_martinique %>% filter(annee == "2017")
+
+```
+
+Harmonistation des codes communes entre la data frame mtq et la data frame comptes_communes_martinique_2017
+```{r}
+comptes_communes_martinique_2017 <-
+  comptes_communes_martinique_2017 %>% mutate(INSEE_COM = depcom) %>% select(-depcom)
+
+comptes_communes_martinique_2017 <-
+  comptes_communes_martinique_2017 %>% mutate(INSEE_COM = str_replace(
+    comptes_communes_martinique_2017$INSEE_COM,
+    "\"97201\"",
+    "97201"
+  )) %>% mutate(INSEE_COM = str_replace(
+    comptes_communes_martinique_2017$INSEE_COM,
+    "\"97202\"",
+    "97202"
+  ))
+comptes_communes_martinique_2017 <-
+  comptes_communes_martinique_2017 %>% mutate(INSEE_COM = str_replace(
+    comptes_communes_martinique_2017$INSEE_COM,
+    "\"97203\"",
+    "97203"
+  ))
+comptes_communes_martinique_2017 <-
+  comptes_communes_martinique_2017 %>% mutate(INSEE_COM = str_replace(
+    comptes_communes_martinique_2017$INSEE_COM,
+    "\"97234\"",
+    "97234"
+  ))
+comptes_communes_martinique_2017$INSEE_COM[5] <- "97204"
+comptes_communes_martinique_2017$INSEE_COM[6] <- "97205"
+comptes_communes_martinique_2017$INSEE_COM[7] <- "97206"
+comptes_communes_martinique_2017$INSEE_COM[8] <- "97207"
+comptes_communes_martinique_2017$INSEE_COM[9] <- "97208"
+comptes_communes_martinique_2017$INSEE_COM[10] <- "97209"
+comptes_communes_martinique_2017$INSEE_COM[11] <- "97210"
+comptes_communes_martinique_2017$INSEE_COM[12] <- "97211"
+comptes_communes_martinique_2017$INSEE_COM[13] <- "97212"
+comptes_communes_martinique_2017$INSEE_COM[14] <- "97213"
+comptes_communes_martinique_2017$INSEE_COM[15] <- "97214"
+comptes_communes_martinique_2017$INSEE_COM[16] <- "97215"
+comptes_communes_martinique_2017$INSEE_COM[17] <- "97216"
+comptes_communes_martinique_2017$INSEE_COM[18] <- "97217"
+comptes_communes_martinique_2017$INSEE_COM[19] <- "97218"
+comptes_communes_martinique_2017$INSEE_COM[20] <- "97233"
+comptes_communes_martinique_2017$INSEE_COM[21] <- "97219"
+comptes_communes_martinique_2017$INSEE_COM[22] <- "97220"
+comptes_communes_martinique_2017$INSEE_COM[23] <- "97221"
+comptes_communes_martinique_2017$INSEE_COM[24] <- "97222"
+comptes_communes_martinique_2017$INSEE_COM[25] <- "97226"
+comptes_communes_martinique_2017$INSEE_COM[26] <- "97227"
+comptes_communes_martinique_2017$INSEE_COM[27] <- "97228"
+comptes_communes_martinique_2017$INSEE_COM[28] <- "97223"
+comptes_communes_martinique_2017$INSEE_COM[29] <- "97224"
+comptes_communes_martinique_2017$INSEE_COM[30] <- "97225"
+comptes_communes_martinique_2017$INSEE_COM[31] <- "97229"
+comptes_communes_martinique_2017$INSEE_COM[32] <- "97230"
+comptes_communes_martinique_2017$INSEE_COM[33] <- "97231"
+comptes_communes_martinique_2017$INSEE_COM[34] <- "97232"
+
+
+```
+
+Jonction des deux tables via le code commune
+```{r}
+mtq_2017 <- inner_join(mtq, comptes_communes_martinique_2017, "INSEE_COM")
+
+```
+
+Cartographie des taux d'épargne brute en 2017
+```{r}
+choroLayer(
+  mtq_2017,
+  var = "taux_epargne_brute",
+  breaks = c(-0.15,-0.10,-0.05, 0, 0.05, 0.1, 0.15, 0.2),
+  method = "equal",
+  nclass = 7,
+  col = carto.pal(
+    pal1 = "red.pal",
+    n1 = 3,
+    pal2 = "green.pal",
+    n2 = 5,
+    middle = FALSE,
+    transparency = TRUE
+  ),
+  border = "white",
+  lwd = 0.5,
+  legend.pos = "topright",
+  legend.values.rnd = 3,
+  legend.title.txt = "Taux Epargne Brute",
+  add = TRUE
+)
+
+```
+
+Cartographie des taux d'épargne nette en 2017
+```{r}
+choroLayer(
+  mtq_2017,
+  var = "taux_epargne_nette",
+  breaks = c(-0.15,-0.10,-0.05, 0, 0.05, 0.1, 0.15),
+  method = "equal",
+  nclass = 6,
+  col = carto.pal(
+    pal1 = "red.pal",
+    n1 = 3,
+    pal2 = "green.pal",
+    n2 = 4,
+    middle = FALSE,
+    transparency = TRUE
+  ),
+  border = "white",
+  lwd = 0.5,
+  legend.pos = "topright",
+  legend.values.rnd = 3,
+  legend.title.txt = "Taux Epargne Nette",
+  add = TRUE
+)
+
+```
+
+Cartographie des taux d'effort en 2017
+```{r}
+choroLayer(mtq_2017, var = "taux_effort", breaks = c(0, 0.1, 0.2, 0.3, 0.4), method = "equal", nclass = 4, col = carto.pal(pal1 = "blue.pal", n1 = 4), border = "white", lwd = 0.5, legend.pos = "topright", legend.values.rnd = 3, legend.title.txt = "Taux Effort", add = TRUE)
+
 ```
 
