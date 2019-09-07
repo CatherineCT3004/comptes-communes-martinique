@@ -531,3 +531,73 @@ layoutLayer(title = "Taux d'Effort 2000 en Martinique",
 
 ```
 
+### Représentation graphique de l'évolution des taux d'épargne brute, d'épargne nette et d'effort
+
+Evolution des taux d'épargne brute par commune
+```{r}
+EB_raster <-
+  comptes_communes_martinique %>% ggplot(aes(x = annee, reorder(
+    comptes_communes_martinique$commune,
+    desc(comptes_communes_martinique$commune)
+  ))) + geom_raster(aes(fill = taux_epargne_brute)) + scale_fill_gradient(low = "red", high = "green") + ylab("communes")
+EB_raster
+
+
+```
+
+Evolution des taux d'épargne nette par commune
+```{r}
+EN_raster <-
+  comptes_communes_martinique %>% ggplot(aes(x = annee, reorder(
+    comptes_communes_martinique$commune,
+    desc(comptes_communes_martinique$commune)
+  ))) + geom_raster(aes(fill = taux_epargne_nette)) + scale_fill_gradient(low = "red", high = "green") + ylab("communes")
+EN_raster
+
+
+```
+
+Evolution des taux d'effort par commune
+```{r}
+TE_raster <-
+comptes_communes_martinique %>% ggplot(aes(x = annee, reorder(
+comptes_communes_martinique$commune,
+desc(comptes_communes_martinique$commune)
+))) + geom_raster(aes(fill = taux_effort)) + scale_fill_gradient(low = "blue", high = "green") + ylab("communes")
+TE_raster
+
+```
+
+Evolution des taux d'épargne brute par strate
+```{r}
+EB_raster_strate <-
+comptes_communes_martinique_groupes %>% ggplot(aes(x = annee, reorder(
+comptes_communes_martinique_groupes$strate,
+desc(comptes_communes_martinique_groupes$strate)
+))) + geom_raster(aes(fill = taux_epargne_brute)) + scale_fill_gradient(low = "red", high = "green") + ylab("strates")
+EB_raster_strate
+
+```
+
+Evolution des taux d'épargne nette par strate
+```{r}
+EN_raster_strate <-
+comptes_communes_martinique_groupes %>% ggplot(aes(x = annee, reorder(
+comptes_communes_martinique_groupes$strate,
+desc(comptes_communes_martinique_groupes$strate)
+))) + geom_raster(aes(fill = taux_epargne_nette)) + scale_fill_gradient(low = "red", high = "green") + ylab("strates")
+EN_raster_strate
+
+```
+
+Evolution des taux d'effort par strate
+```{r}
+TE_raster_strate <-
+comptes_communes_martinique_groupes %>% ggplot(aes(x = annee, reorder(
+comptes_communes_martinique_groupes$strate,
+desc(comptes_communes_martinique_groupes$strate)
+))) + geom_raster(aes(fill = taux_effort)) + scale_fill_gradient(low = "blue", high = "green") + ylab("strates")
+TE_raster_strate
+
+```
+
