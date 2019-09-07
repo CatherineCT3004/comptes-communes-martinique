@@ -284,6 +284,8 @@ mtq_2017 <- inner_join(mtq, comptes_communes_martinique_2017, "INSEE_COM")
 
 Cartographie des taux d'épargne brute en 2017
 ```{r}
+plot.new()
+plot(st_geometry(mtq), col = NA, border = NA, bg = "#aadaff")
 choroLayer(
   mtq_2017,
   var = "taux_epargne_brute",
@@ -310,6 +312,8 @@ choroLayer(
 
 Cartographie des taux d'épargne nette en 2017
 ```{r}
+plot.new()
+plot(st_geometry(mtq), col = NA, border = NA, bg = "#aadaff")
 choroLayer(
   mtq_2017,
   var = "taux_epargne_nette",
@@ -336,7 +340,22 @@ choroLayer(
 
 Cartographie des taux d'effort en 2017
 ```{r}
-choroLayer(mtq_2017, var = "taux_effort", breaks = c(0, 0.1, 0.2, 0.3, 0.4), method = "equal", nclass = 4, col = carto.pal(pal1 = "blue.pal", n1 = 4), border = "white", lwd = 0.5, legend.pos = "topright", legend.values.rnd = 3, legend.title.txt = "Taux Effort", add = TRUE)
+plot.new()
+plot(st_geometry(mtq), col = NA, border = NA, bg = "#aadaff")
+choroLayer(
+  mtq_2017,
+  var = "taux_effort",
+  breaks = c(0, 0.1, 0.2, 0.3, 0.4),
+  method = "equal",
+  nclass = 4,
+  col = carto.pal(pal1 = "blue.pal", n1 = 4),
+  border = "white",
+  lwd = 0.5,
+  legend.pos = "topright",
+  legend.values.rnd = 3,
+  legend.title.txt = "Taux Effort",
+  add = TRUE
+)
 
 ```
 
