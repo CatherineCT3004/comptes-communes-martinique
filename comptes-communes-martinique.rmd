@@ -574,7 +574,7 @@ EB_raster_strate <-
 comptes_communes_martinique_groupes %>% ggplot(aes(x = annee, reorder(
 comptes_communes_martinique_groupes$strate,
 desc(comptes_communes_martinique_groupes$strate)
-))) + geom_raster(aes(fill = taux_epargne_brute)) + scale_fill_gradient(low = "red", high = "green") + ylab("strates")
+))) + geom_raster(aes(fill = taux_EB_moyen)) + scale_fill_gradient(low = "red", high = "green") + ylab("strates")
 EB_raster_strate
 
 ```
@@ -585,7 +585,7 @@ EN_raster_strate <-
 comptes_communes_martinique_groupes %>% ggplot(aes(x = annee, reorder(
 comptes_communes_martinique_groupes$strate,
 desc(comptes_communes_martinique_groupes$strate)
-))) + geom_raster(aes(fill = taux_epargne_nette)) + scale_fill_gradient(low = "red", high = "green") + ylab("strates")
+))) + geom_raster(aes(fill = taux_EN_moyen)) + scale_fill_gradient(low = "red", high = "green") + ylab("strates")
 EN_raster_strate
 
 ```
@@ -596,7 +596,7 @@ TE_raster_strate <-
 comptes_communes_martinique_groupes %>% ggplot(aes(x = annee, reorder(
 comptes_communes_martinique_groupes$strate,
 desc(comptes_communes_martinique_groupes$strate)
-))) + geom_raster(aes(fill = taux_effort)) + scale_fill_gradient(low = "blue", high = "green") + ylab("strates")
+))) + geom_raster(aes(fill = taux_effort_moyen)) + scale_fill_gradient(low = "blue", high = "green") + ylab("strates")
 TE_raster_strate
 
 ```
