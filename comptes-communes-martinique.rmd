@@ -71,7 +71,7 @@ communes_colonnes <-
     "cotis_fonciere_entreprises",
     "cotis_fonciere_enreprises_base",
     "cotisation_valeur_ajoutee_entreprises",
-    "import_forfait_entreprises_reseau",
+    "impot_forfait_entreprises_reseau",
     "taxe_surf_commerciales",
     "compensation_relais_2010",
     "taxe_professionnelle",
@@ -84,6 +84,66 @@ comptes_communes_2000_2017 <-
   comptes_communes_2000_2017 %>% separate(1, communes_colonnes, ",")
 
 ```
+
+
+Formatage des données numériques
+
+```{r}
+comptes_communes_2000_2017 <-
+  comptes_communes_2000_2017 %>% mutate(
+    annee = as.numeric(annee),
+    population = as.numeric(population),
+    produits_total = as.numeric(produits_total),
+    prod_impots_locaux = as.numeric(prod_impots_locaux),
+    prod_autres_impots_taxes = as.numeric(prod_autres_impots_taxes),
+    prod_dotation = as.numeric(prod_dotation),
+    charges_total = as.numeric(charges_total),
+    charges_personnel = as.numeric(charges_personnel),
+    charges_achats = as.numeric(charges_achats),
+    charges_financieres = as.numeric(charges_financieres),
+    charges_contingents = as.numeric(charges_contingents),
+    charges_subventions = as.numeric(charges_subventions),
+    resultat_comptable = as.numeric(resultat_comptable),
+    invest_ressources_total = as.numeric(invest_ressources_total),
+    invest_ress_emprunts = as.numeric(invest_ress_emprunts),
+    invest_ress_subventions = as.numeric(invest_ress_subventions),
+    invest_ress_fctva = as.numeric(invest_ress_fctva),
+    invest_ress_retours = as.numeric(invest_ress_retours),
+    invest_emplois_total = as.numeric(invest_emplois_total),
+    invest_empl_equipements = as.numeric(invest_empl_equipements),
+    invest_empl_remboursement_emprunts = as.numeric(invest_empl_remboursement_emprunts),
+    invest_empl_charges = as.numeric(invest_empl_charges),
+    invest_empl_immobilisations = as.numeric(invest_empl_immobilisations),
+    excedent_brut = as.numeric(excedent_brut),
+    cap_autofinancement = as.numeric(cap_autofinancement),
+    cap_autofinancement_nette = as.numeric(cap_autofinancement_nette),
+    dette_encours_total = as.numeric(dette_encours_total),
+    dette_encours_bancaire = as.numeric(dette_encours_bancaire),
+    avance_tresor = as.numeric(avance_tresor),
+    dette_annuite = as.numeric(dette_annuite),
+    fond_de_roulement = as.numeric(fond_de_roulement),
+    taxe_habitation = as.numeric(taxe_habitation),
+    taxe_habitation_base = as.numeric(taxe_habitation_base),
+    taxe_foncier_bati = as.numeric(taxe_foncier_bati),
+    taxe_foncier_bati_base = as.numeric(taxe_foncier_bati_base),
+    taxe_non_bati = as.numeric(taxe_non_bati),
+    taxe_non_bati_base = as.numeric(taxe_non_bati_base),
+    taxe_add_non_bati = as.numeric(taxe_add_non_bati),
+    taxe_add_non_bati_base = as.numeric(taxe_add_non_bati_base),
+    cotis_fonciere_entreprises = as.numeric(cotis_fonciere_entreprises),
+    cotis_fonciere_enreprises_base = as.numeric(cotis_fonciere_enreprises_base),
+    cotisation_valeur_ajoutee_entreprises = as.numeric(cotisation_valeur_ajoutee_entreprises),
+    impot_forfait_entreprises_reseau = as.numeric(impot_forfait_entreprises_reseau),
+    taxe_surf_commerciales = as.numeric(taxe_surf_commerciales),
+    compensation_relais_2010 = as.numeric(compensation_relais_2010),
+    taxe_professionnelle = as.numeric(taxe_professionnelle),
+    taxe_professionnelle_base = as.numeric(taxe_professionnelle_base),
+    produits_fonctionnement_caf = as.numeric(produits_fonctionnement_caf),
+    charges_fonctionnement_caf = as.numeric(charges_fonctionnement_caf),
+    encours_bancaire_net_solde_fonds_toxiques = as.numeric(encours_bancaire_net_solde_fonds_toxiques)
+  )
+```
+
 
 Effacement des caractères parasites
 
@@ -116,7 +176,7 @@ comptes_communes_martinique <- comptes_communes_2000_2017 %>% filter(dep == "\"9
 Estimation des taux d'épargne brute
 ```{r}
 comptes_communes_martinique <-
-  comptes_communes_martinique %>% mutate(taux_epargne_brute = as.numeric(cap_autofinancement) / as.numeric(produits_total))
+  comptes_communes_martinique %>% mutate(taux_epargne_brute = cap_autofinancement / produits_total)
 
 
 ```
@@ -124,7 +184,7 @@ comptes_communes_martinique <-
 Estimation des taux d'épargne nette
 ```{r}
 comptes_communes_martinique <-
-  comptes_communes_martinique %>% mutate(taux_epargne_nette = as.numeric(cap_autofinancement_nette) / as.numeric(produits_total))
+  comptes_communes_martinique %>% mutate(taux_epargne_nette = cap_autofinancement_nette / produits_total)
 
 
 ```
@@ -132,7 +192,7 @@ comptes_communes_martinique <-
 Estimation des taux d'effort
 ```{r}
 comptes_communes_martinique <-
-  comptes_communes_martinique %>% mutate(taux_effort = as.numeric(invest_empl_equipements) / as.numeric(produits_total))
+  comptes_communes_martinique %>% mutate(taux_effort = invest_empl_equipements / produits_total)
 
 ```
 
@@ -140,7 +200,7 @@ Stratification de la population
 ```{r}
 comptes_communes_martinique <-
   comptes_communes_martinique %>% mutate(strate = cut(
-    as.numeric(comptes_communes_martinique$population),
+    comptes_communes_martinique$population,
     breaks = c(0, 500, 2000, 5000, 10000, 30000, 100000),
     labels = c(
       "<500",
@@ -167,7 +227,7 @@ comptes_communes_martinique_groupes <-
     taux_effort_moyen = mean(taux_effort),
     charges_personnel_moyennes = mean(as.numeric(charges_personnel))
   )
-comptes_communes_martinique_groupes <- comptes_communes_martinique_groupes %>% mutate(depenses_equipements_moyennes = mean(as.numeric(invest_empl_equipements)))
+comptes_communes_martinique_groupes <- comptes_communes_martinique_groupes %>% mutate(depenses_equipements_moyennes = mean(invest_empl_equipements))
 
 ```
 
@@ -254,6 +314,7 @@ comptes_communes_martinique_2017 <-
     "\"97234\"",
     "97234"
   ))
+comptes_communes_martinique_2017$INSEE_COM[1] <- "97201"
 comptes_communes_martinique_2017$INSEE_COM[5] <- "97204"
 comptes_communes_martinique_2017$INSEE_COM[6] <- "97205"
 comptes_communes_martinique_2017$INSEE_COM[7] <- "97206"
@@ -415,6 +476,7 @@ comptes_communes_martinique_2000 <-
     "\"97234\"",
     "97234"
   ))
+comptes_communes_martinique_2017$INSEE_COM[1] <- "97201"
 comptes_communes_martinique_2000$INSEE_COM[1] <- "97201"
 comptes_communes_martinique_2000$INSEE_COM[5] <- "97204"
 comptes_communes_martinique_2000$INSEE_COM[6] <- "97205"
