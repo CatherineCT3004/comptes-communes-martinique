@@ -164,8 +164,10 @@ comptes_communes_martinique_groupes <-
   comptes_communes_martinique %>% group_by(annee, strate) %>% mutate(
     taux_EB_moyen = mean(taux_epargne_brute),
     taux_EN_moyen = mean(taux_epargne_nette),
-    taux_effort_moyen = mean(taux_effort)
+    taux_effort_moyen = mean(taux_effort),
+    charges_personnel_moyennes = mean(as.numeric(charges_personnel))
   )
+comptes_communes_martinique_groupes <- comptes_communes_martinique_groupes %>% mutate(depenses_equipements_moyennes = mean(as.numeric(invest_empl_equipements)))
 
 ```
 
@@ -196,6 +198,16 @@ geom_point(alpha = 0.5) +
 geom_smooth(method = "lm") +
 facet_wrap( ~ strate)
 ```
+Visualisation de l'évolution des dépenses d'équipement par strate
+```{r}
+comptes_communes_martinique_groupes %>%
+ggplot(aes(annee, depenses_equipements_moyennes)) +
+geom_point(alpha = 0.5) +
+geom_smooth(method = "lm") +
+facet_wrap( ~ strate)
+```
+
+
 
 ### Représentation cartographique des taux d'épargne brute, d'épargne nette et d'effort
 
@@ -539,7 +551,7 @@ EB_raster <-
   comptes_communes_martinique %>% ggplot(aes(x = annee, reorder(
     comptes_communes_martinique$commune,
     desc(comptes_communes_martinique$commune)
-  ))) + geom_raster(aes(fill = taux_epargne_brute)) + scale_fill_gradient(low = "red", high = "green") + ylab("communes")
+  ))) + geom_raster(aes(fill = taux_epargne_brute)) + scale_fill_gradient(low = "red", high = "green") + ylab("communes") + ggtitle("Evolution du taux d'épargne brute par commune")
 EB_raster
 
 
@@ -600,4 +612,6 @@ desc(comptes_communes_martinique_groupes$strate)
 TE_raster_strate
 
 ```
+
+### Analyse linéaire
 
