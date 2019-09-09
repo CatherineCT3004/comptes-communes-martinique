@@ -131,7 +131,7 @@ comptes_communes_2000_2017 <-
     taxe_add_non_bati = as.numeric(taxe_add_non_bati),
     taxe_add_non_bati_base = as.numeric(taxe_add_non_bati_base),
     cotis_fonciere_entreprises = as.numeric(cotis_fonciere_entreprises),
-    cotis_fonciere_enreprises_base = as.numeric(cotis_fonciere_enreprises_base),
+    cotis_fonciere_entreprises_base = as.numeric(cotis_fonciere_enreprises_base),
     cotisation_valeur_ajoutee_entreprises = as.numeric(cotisation_valeur_ajoutee_entreprises),
     impot_forfait_entreprises_reseau = as.numeric(impot_forfait_entreprises_reseau),
     taxe_surf_commerciales = as.numeric(taxe_surf_commerciales),
@@ -143,6 +143,61 @@ comptes_communes_2000_2017 <-
     encours_bancaire_net_solde_fonds_toxiques = as.numeric(encours_bancaire_net_solde_fonds_toxiques)
   )
 ```
+
+Introduction des données par habitant
+```{r}
+comptes_communes_2000_2017 <-
+  comptes_communes_2000_2017 %>% mutate(
+    produits_total_par_habitant = produits_total*1000 / population,
+    prod_impots_locaux_par_habitant = prod_impots_locaux*1000 / population,
+    prod_autres_impots_taxes_par_habitant = prod_autres_impots_taxes*1000 / population,
+    prod_dotation_par_habitant = prod_dotation*1000 / population,
+    charges_total_par_habitant = charges_total*1000 / population,
+    charges_personnel_par_habitant = charges_personnel*1000 / population,
+    charges_achats_par_habitant = charges_achats*1000 / population,
+    charges_financieres_par_habitant = charges_financieres*1000 / population,
+    charges_contingents_par_habitant = charges_contingents*1000 / population,
+    charges_subventions_par_habitant = charges_subventions*1000 / population,
+    resultat_comptable_par_habitant = resultat_comptable*1000 / population,
+    invest_ressources_total_par_habitant = invest_ressources_total*1000 / population,
+    invest_ress_emprunts_par_habitant = invest_ress_emprunts*1000 / population,
+    invest_ress_subventions_par_habitant = invest_ress_subventions*1000 / population,
+    invest_ress_fctva_par_habitant = invest_ress_fctva*1000 / population,
+    invest_ress_retours_par_habitant = invest_ress_retours*1000 / population,
+    invest_emplois_total_par_habitant = invest_emplois_total*1000 / population,
+    invest_empl_equipements_par_habitant = invest_empl_equipements*1000 / population,
+    invest_empl_remboursement_emprunts_par_habitant = invest_empl_remboursement_emprunts*1000 / population,
+    invest_empl_charges_par_habitant = invest_empl_charges*1000 / population,
+    invest_empl_immobilisations_par_habitant = invest_empl_immobilisations*1000 / population,
+    excedent_brut_par_habitant = excedent_brut*1000 / population,
+    cap_autofinancement_par_habitant = cap_autofinancement*1000 / population,
+    cap_autofinancement_nette_par_habitant = cap_autofinancement_nette*1000/population,
+    dette_encours_total_par_habitant = dette_encours_total*1000 / population,
+    dette_encours_bancaire_par_habitant = dette_encours_bancaire*1000 / population,
+    avance_tresor_par_habitant = avance_tresor*1000 / population,
+    dette_annuite_par_habitant = dette_annuite*1000 / population,
+    fond_de_roulement_par_habitant = fond_de_roulement*1000 / population,
+    taxe_habitation_par_habitant = taxe_habitation*1000 / population,
+    taxe_habitation_base_par_habitant = taxe_habitation_base*1000 / population,
+    taxe_foncier_bati_par_habitant = taxe_foncier_bati*1000 / population,
+    taxe_foncier_bati_base_par_habitant = taxe_foncier_bati_base*1000 / population,
+    taxe_non_bati_par_habitant = taxe_non_bati*1000 / population,
+    taxe_non_bati_base_par_habitant = taxe_add_non_bati_base*1000 / population,
+    taxe_add_non_bati_par_habitant = taxe_add_non_bati*1000 / population,
+    taxe_add_non_bati_base_par_habitant = taxe_add_non_bati_base*1000 / population,
+    cotis_fonciere_entreprises_par_habitant = cotis_fonciere_entreprises*1000 / population,
+    cotis_fonciere_entreprises_base_par_habitant = cotis_fonciere_entreprises_base*1000 / population,
+    cotisation_valeur_ajoutee_entreprises_par_habitant = cotisation_valeur_ajoutee_entreprises*1000 / population,
+    impot_forfait_entreprises_reseau_par_habitant = impot_forfait_entreprises_reseau*1000 / population,
+    taxe_surf_commerciales_par_habitant = taxe_surf_commerciales*1000 / population,
+    compensation_relais_2010_par_habitant = compensation_relais_2010*1000 / population,
+    taxe_professionnelle_par_habitant = taxe_professionnelle*1000 / population,
+    taxe_professionnelle_base_par_habitant = taxe_professionnelle_base*1000 / population,
+    produits_fonctionnement_caf_par_habitant = produits_fonctionnement_caf*1000 / population,
+    charges_fonctionnement_caf_par_habitant = charges_fonctionnement_caf*1000 / population,
+    encours_bancaire_net_solde_fonds_toxiques_par_habitant = encours_bancaire_net_solde_fonds_toxiques*1000 / population)
+```
+
 
 
 Effacement des caractères parasites
@@ -218,16 +273,16 @@ comptes_communes_martinique <-
 ```
 ## Analyse exploratoire
 
-Les communes son groupées par année et par strate
+Les communes sont groupées par année et par strate (par habitant)
 ```{r}
 comptes_communes_martinique_groupes <-
   comptes_communes_martinique %>% group_by(annee, strate) %>% mutate(
     taux_EB_moyen = mean(taux_epargne_brute),
     taux_EN_moyen = mean(taux_epargne_nette),
     taux_effort_moyen = mean(taux_effort),
-    charges_personnel_moyennes = mean(as.numeric(charges_personnel))
+    charges_personnel_moyennes = mean(charges_personnel_par_habitant),
+    depenses_equipement_moyennes = mean(invest_empl_equipements_par_habitant)
   )
-comptes_communes_martinique_groupes <- comptes_communes_martinique_groupes %>% mutate(depenses_equipements_moyennes = mean(invest_empl_equipements))
 
 ```
 
@@ -261,7 +316,7 @@ facet_wrap( ~ strate)
 Visualisation de l'évolution des dépenses d'équipement par strate
 ```{r}
 comptes_communes_martinique_groupes %>%
-ggplot(aes(annee, depenses_equipements_moyennes)) +
+ggplot(aes(annee, depenses_equipement_moyennes)) +
 geom_point(alpha = 0.5) +
 geom_smooth(method = "lm") +
 facet_wrap( ~ strate)
