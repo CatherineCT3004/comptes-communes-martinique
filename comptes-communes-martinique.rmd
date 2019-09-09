@@ -273,7 +273,7 @@ comptes_communes_martinique <-
 ```
 ## Analyse exploratoire
 
-Les communes sont groupées par année et par strate (par habitant)
+Les communes sont groupées par année et par strate 
 ```{r}
 comptes_communes_martinique_groupes <-
   comptes_communes_martinique %>% group_by(annee, strate) %>% mutate(
